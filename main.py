@@ -58,6 +58,9 @@ class MainWidget(RelativeLayout):
     menu_button_title = StringProperty("START")
 
     score_txt = StringProperty("0")
+    high_score_int = 0
+    high_score_txt = StringProperty(f"HIGH - SCORE: {str(high_score_int)}")
+
     sound_begin = None
     sound_galaxy = None
     sound_game_over_impact = None
@@ -66,9 +69,6 @@ class MainWidget(RelativeLayout):
     sound_restart = None
 
     dif_level = None
-    menu_button_easy = StringProperty("EASY")
-    menu_button_medium = StringProperty("MEDIUM")
-    menu_button_hard = StringProperty("HARD")
 
     def __init__(self, **kwargs):
         super(MainWidget, self).__init__(**kwargs)
@@ -305,6 +305,10 @@ class MainWidget(RelativeLayout):
             self.current_offset_x += speed_x * time_factor
 
         if not self.check_ship_collision() and not self.game_over_state:
+            if int(self.high_score_int) <= self.current_y_loop:
+                self.high_score_int = self.current_y_loop
+                self.high_score_txt = f"HIGH - SCORE: {str(self.high_score_int)}"
+
             self.game_over_state = True
             self.menu_widget.opacity = 1
             self.menu_title = " G  A  M  E     O  V  E  R"
@@ -338,5 +342,4 @@ class HorizonApp(App):
 
 HorizonApp().run()
 
-# TODO: add 3 difficulty levels
 # TODO: add highscore label, and keep it in game session
