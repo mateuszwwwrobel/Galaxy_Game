@@ -33,7 +33,7 @@ class MainWidget(RelativeLayout):
     HOR_LINES_SPACING = .1
     horizontal_lines = []
 
-    SPEED = .6
+    SPEED = .7
     current_offset_y = 0
     current_y_loop = 0
 
@@ -64,6 +64,11 @@ class MainWidget(RelativeLayout):
     sound_game_over_voice = None
     sound_music = None
     sound_restart = None
+
+    dif_level = None
+    menu_button_easy = StringProperty("EASY")
+    menu_button_medium = StringProperty("MEDIUM")
+    menu_button_hard = StringProperty("HARD")
 
     def __init__(self, **kwargs):
         super(MainWidget, self).__init__(**kwargs)
@@ -97,12 +102,24 @@ class MainWidget(RelativeLayout):
         self.sound_restart.volume = .25
         self.sound_begin.volume = .25
 
+    def set_difficulty_level(self):
+        if not self.dif_level:
+            self.dif_level = 'medium'
+
+        if self.dif_level == 'easy':
+            self.SPEED = .5
+        elif self.dif_level == 'medium':
+            self.SPEED = .7
+        elif self.dif_level == 'hard':
+            self.SPEED = 1.2
+
     def reset_game(self):
         self.current_offset_y = 0
         self.current_y_loop = 0
         self.current_speed_x = 0
         self.current_offset_x = 0
         self.score_txt = f"SCORE: {str(self.current_y_loop)}"
+        self.set_difficulty_level()
 
         self.tiles_coordinates = []
         self.pre_fill_tiles_coordinates()
@@ -310,6 +327,9 @@ class MainWidget(RelativeLayout):
         self.reset_game()
         self.menu_widget.opacity = 0
         self.start_game_state = True
+
+    def on_difficulty_level_button_press(self, dif_level):
+        self.dif_level = dif_level
 
 
 class HorizonApp(App):
