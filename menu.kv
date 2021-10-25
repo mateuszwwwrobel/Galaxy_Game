@@ -19,3 +19,30 @@
         on_press: root.parent.on_menu_button_press()
         background_normal: ''
         background_color: 1, .3, .4, .85
+    Button:
+        font_size: dp(30)
+        font_name: 'fonts/Eurostile.ttf'
+        text: "EASY"
+        pos_hint: { "center_x": 0.85, "center_y": 0.4}
+        size_hint: .15, .08
+        on_press: root.parent.on_difficulty_level_button_press('easy')
+        background_normal: ''
+        background_color: 1, .3, .4, .85
+    Button:
+        font_size: dp(30)
+        font_name: 'fonts/Eurostile.ttf'
+        text: "MEDIUM"
+        pos_hint: { "center_x": 0.85, "center_y": 0.3}
+        size_hint: .15, .08
+        on_press: root.parent.on_difficulty_level_button_press('medium')
+        background_normal: ''
+        background_color: 1, .3, .4, .85
+    Button:
+        font_size: dp(30)
+        font_name: 'fonts/Eurostile.ttf'
+        text: "HARD"
+        pos_hint: { "center_x": 0.85, "center_y": 0.2}
+        size_hint: .15, .08
+        on_press: root.parent.on_difficulty_level_button_press('hard')
+        background_normal: ''
+        background_color: 1, .3, .4, .85

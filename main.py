@@ -5,13 +5,14 @@ from kivy.config import Config
 Config.set('graphics', 'width', '1500')
 Config.set('graphics', 'height', '700')
 
-from kivy.core.audio import SoundLoader
-from kivy.core.window import Window
+
+from kivy import platform
 from kivy.app import App
 from kivy.graphics import Color, Line, Quad, Triangle
 from kivy.properties import NumericProperty, Clock, ObjectProperty, StringProperty
-from kivy import platform
 from kivy.lang import Builder
+from kivy.core.audio import SoundLoader
+from kivy.core.window import Window
 from kivy.uix.relativelayout import RelativeLayout
 
 Builder.load_file('menu.kv')
@@ -33,7 +34,7 @@ class MainWidget(RelativeLayout):
     HOR_LINES_SPACING = .1
     horizontal_lines = []
 
-    SPEED = .6
+    SPEED = .7
     current_offset_y = 0
     current_y_loop = 0
 
@@ -58,12 +59,17 @@ class MainWidget(RelativeLayout):
     menu_button_title = StringProperty("START")
 
     score_txt = StringProperty("0")
+    high_score_int = 0
+    high_score_txt = StringProperty(f"HIGH - SCORE: {str(high_score_int)}")
+
     sound_begin = None
     sound_galaxy = None
     sound_game_over_impact = None
     sound_game_over_voice = None
     sound_music = None
     sound_restart = None
+
+    dif_level = None
 
     def __init__(self, **kwargs):
         super(MainWidget, self).__init__(**kwargs)
@@ -97,12 +103,24 @@ class MainWidget(RelativeLayout):
         self.sound_restart.volume = .25
         self.sound_begin.volume = .25
 
+    def set_difficulty_level(self):
+        if not self.dif_level:
+            self.dif_level = 'medium'
+
+        if self.dif_level == 'easy':
+            self.SPEED = .5
+        elif self.dif_level == 'medium':
+            self.SPEED = .7
+        elif self.dif_level == 'hard':
+            self.SPEED = 1.2
+
     def reset_game(self):
         self.current_offset_y = 0
         self.current_y_loop = 0
         self.current_speed_x = 0
         self.current_offset_x = 0
         self.score_txt = f"SCORE: {str(self.current_y_loop)}"
+        self.set_difficulty_level()
 
         self.tiles_coordinates = []
         self.pre_fill_tiles_coordinates()
@@ -288,6 +306,10 @@ class MainWidget(RelativeLayout):
             self.current_offset_x += speed_x * time_factor
 
         if not self.check_ship_collision() and not self.game_over_state:
+            if int(self.high_score_int) <= self.current_y_loop:
+                self.high_score_int = self.current_y_loop
+                self.high_score_txt = f"HIGH - SCORE: {str(self.high_score_int)}"
+
             self.game_over_state = True
             self.menu_widget.opacity = 1
             self.menu_title = " G  A  M  E     O  V  E  R"
@@ -311,12 +333,12 @@ class MainWidget(RelativeLayout):
         self.menu_widget.opacity = 0
         self.start_game_state = True
 
+    def on_difficulty_level_button_press(self, dif_level):
+        self.dif_level = dif_level
+
 
 class HorizonApp(App):
     pass
 
 
 HorizonApp().run()
-
-# TODO: add 3 difficulty levels
-# TODO: add highscore label, and keep it in game session
