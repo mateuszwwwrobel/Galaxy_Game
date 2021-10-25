@@ -5,13 +5,14 @@ from kivy.config import Config
 Config.set('graphics', 'width', '1500')
 Config.set('graphics', 'height', '700')
 
-from kivy.core.audio import SoundLoader
-from kivy.core.window import Window
+
+from kivy import platform
 from kivy.app import App
 from kivy.graphics import Color, Line, Quad, Triangle
 from kivy.properties import NumericProperty, Clock, ObjectProperty, StringProperty
-from kivy import platform
 from kivy.lang import Builder
+from kivy.core.audio import SoundLoader
+from kivy.core.window import Window
 from kivy.uix.relativelayout import RelativeLayout
 
 Builder.load_file('menu.kv')
@@ -341,5 +342,3 @@ class HorizonApp(App):
 
 
 HorizonApp().run()
-
-# TODO: add highscore label, and keep it in game session
